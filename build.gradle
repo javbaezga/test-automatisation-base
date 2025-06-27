@@ -7,23 +7,51 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-
-group 'com.example'
+group 'com.pichincha'
 version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
 
+sourceSets {
+    test {
+        java {
+            srcDir file('src/test/java')
+        }
+        resources {
+            srcDir file('src/test/java')
+            exclude '**/*.java'
+        }
+    }
+}
+
 dependencies {
-    
-    testImplementation 'com.intuit.karate:karate-junit5:1.4.1',
-            "com.intuit.karate:karate-netty:0.9.2",
-            "com.intuit.karate:karate-apache:0.9.6",
-            "net.masterthought:cucumber-reporting:5.8.1",
-            'junit:junit:4.13.2'
+    testImplementation 'com.intuit.karate:karate-junit5:1.4.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
 }
 
 test {
     useJUnitPlatform()
+    
+    // Configurar directorio de reportes de Karate
+    systemProperty 'karate.output.dir', 'karate-reports'
+    
+    // Configuraciones adicionales para los reportes
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+    
+    // Asegurar que se generen reportes incluso si hay fallos
+    ignoreFailures = false
+    
+    // FORZAR que los tests SIEMPRE se ejecuten (sin cache)
+    outputs.upToDateWhen { false }
+    
+    // Configurar variables de entorno para Karate
+    systemProperties = [
+        'karate.output.dir': 'karate-reports',
+        'karate.env': project.hasProperty('karate.env') ? project.property('karate.env') : 'local'
+    ]
 }

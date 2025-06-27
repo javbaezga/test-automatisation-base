@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+    <!-- Console output pattern -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Karate-specific logging (for debugging feature execution) -->
+    <logger name="com.intuit.karate" level="DEBUG" />
+    <logger name="com.intuit.karate.core" level="DEBUG" />
+    <logger name="com.intuit.karate.runtime" level="INFO" />
+
+    <!-- Reduce noise from Apache HTTP client -->
+    <logger name="org.apache.http" level="WARN" />
+
+    <!-- Root logger -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>
